@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 
 import './Form.css'
 import {useTelegram} from "../../hooks";
@@ -7,6 +7,22 @@ const Form = () => {
     const [street, setStreet ] = useState()
     const [subject, setSubject ] = useState()
     const {tg} = useTelegram()
+
+    const onSendData = useCallback(()=>{
+        const data = {
+            country,
+            street,
+            subject
+        }
+        tg.sendData(JSON.stringify(data))
+    },[])
+
+    useEffect(()=>{
+        tg.WebApp.onEvent('mainbtnclck', callback)
+        return () => {
+            tg.WebApp.offEvent('mainbtnclck', callback)
+        }
+    },[])
 
     useEffect(() => {
         tg.MainButton.setParams({
@@ -35,8 +51,23 @@ const Form = () => {
     return (
         <div className="form">
             <h3>Input your data</h3>
-            <input className="input" type="text" placeholder="country" value={country} onChange={onChangeCountry}/>
-            <input className="input" type="text" placeholder="street" value={street} onChange={onChangeStreet}/>
+
+            <input
+                className="input"
+                type="text"
+                placeholder="country"
+                value={country}
+                onChange={onChangeCountry}
+            />
+
+            <input
+                className="input"
+                type="text"
+                placeholder="street"
+                value={street}
+                onChange={onChangeStreet}
+            />
+
             <select className="select" value={subject} onChange={onChangeSubject}>
                 <option value="physical">Person</option>
                 <option value="legal">Company</option>

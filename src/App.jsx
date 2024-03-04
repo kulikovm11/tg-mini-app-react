@@ -8,7 +8,7 @@ import {Form, Header, Products} from "./components";
 
 const App = () => {
 
-    const { tg, onToggleButton} = useTelegram()
+    const { tg } = useTelegram()
 
     useEffect(()=>{
         tg.ready()
